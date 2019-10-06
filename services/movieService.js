@@ -26,7 +26,11 @@ movieService.getMovies = async (searchBy, searchValue) => {
   } else movies = await movieRepository.findAllMovies()
 
   const moviesDTO = {
-    movies: movies.map(movie => ({ title: movie.title, plot: movie.plot }))
+    movies: movies.map(movie => ({
+      title: movie.title,
+      plot: movie.plot,
+      actors: movie.actors
+    }))
   }
   return moviesDTO
 }

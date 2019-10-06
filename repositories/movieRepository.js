@@ -31,7 +31,7 @@ movieRepository.findAllMoviesContainsPlot = async searchValue => {
 movieRepository.findAllMoviesContainsActor = async searchValue => {
   const movies = await connection.db
     .collection('movieDetails')
-    .find({ actor: { $regex: `.*${searchValue}.*`, $options: 'i' } })
+    .find({ actors: { $regex: `.*${searchValue}.*`, $options: 'i' } })
     .toArray()
   return movies
 }
