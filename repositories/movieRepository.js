@@ -4,6 +4,14 @@ const { ObjectId } = mongoose.Types
 
 const movieRepository = {}
 
+movieRepository.findAllMovies = async () => {
+  const movies = await connection.db
+    .collection('movieDetails')
+    .find()
+    .toArray()
+  return movies
+}
+
 movieRepository.findMovieById = async id => {
   const movie = await connection.db
     .collection('movieDetails')
