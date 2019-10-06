@@ -27,9 +27,11 @@ movieService.getMovies = async (searchBy, searchValue) => {
 
   const moviesDTO = {
     movies: movies.map(movie => ({
+      id: movie._id,
+      poster: movie.poster,
       title: movie.title,
-      plot: movie.plot,
-      actors: movie.actors
+      year: movie.year,
+      genre: movie.genre
     }))
   }
   return moviesDTO
@@ -39,8 +41,16 @@ movieService.getMovieById = async id => {
   const movie = await movieRepository.findMovieById(id)
   if (!movie) throw boom.NotFound()
   const movieDTO = {
+    id: movie._id,
+    poster: movie.poster,
     title: movie.title,
-    plot: movie.plot
+    year: movie.year,
+    actors: movie.actors,
+    plot: movie.plot,
+    rated: movie.rated,
+    genre: movie.genre,
+    director: movie.director,
+    writers: movie.writers
   }
   return movieDTO
 }
