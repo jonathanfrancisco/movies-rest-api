@@ -4,10 +4,20 @@ const { ObjectId } = mongoose.Types
 
 const movieRepository = {}
 
-movieRepository.findAllMovies = async () => {
+movieRepository.getMoviesCount = async () => {
+  const moviesCount = await connection.db
+    .collection('movieDetails')
+    .find()
+    .count()
+  return moviesCount
+}
+
+movieRepository.findAllMovies = async (offset, limit) => {
   const movies = await connection.db
     .collection('movieDetails')
     .find()
+    .skip(offset)
+    .limit(limit)
     .toArray()
   return movies
 }

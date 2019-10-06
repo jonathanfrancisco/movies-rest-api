@@ -3,8 +3,14 @@ const movieRepository = require('../repositories/movieRepository')
 
 const movieService = {}
 
-movieService.getMovies = async (searchBy, searchValue) => {
+movieService.getMovies = async (
+  searchBy,
+  searchValue,
+  page = 1,
+  limit = 10
+) => {
   let movies = []
+  const offset = (parseInt(page, 10) - 1) * parseInt(limit, 10)
   if (
     (searchBy && searchValue === undefined) ||
     (searchBy === undefined && searchValue)
@@ -23,16 +29,19 @@ movieService.getMovies = async (searchBy, searchValue) => {
       movieRepository.findAllMoviesContainsActor(searchValue)
     ])
     movies = [...byTitle, ...byPlot, ...byActor]
-  } else movies = await movieRepository.findAllMovies()
-
+  } else movies = await movieRepository.findAllMovies(offset, limit)
+  const moviesCount = movieRepository.getMoviesCount()
   const moviesDTO = {
-    movies: movies.map(movie => ({
-      id: movie._id,
-      poster: movie.poster,
-      title: movie.title,
-      year: movie.year,
-      genre: movie.genre
-    }))
+    data: {
+      movies: movies.map(movie => ({
+        id: movie._id,
+        poster: movie.poster,
+        title: movie.title,
+        year: movie.year,
+        genre: movie.genre
+      })),
+      currentPage: page
+    }
   }
   return moviesDTO
 }
