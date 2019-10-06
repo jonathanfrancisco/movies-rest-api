@@ -4,9 +4,12 @@ const movieRepository = require('../repositories/movieRepository')
 const movieService = {}
 
 movieService.getMovies = async (searchBy, searchValue) => {
-  let movies
-  if (searchBy === undefined && searchValue === undefined)
-    movies = await movieRepository.findAllMovies()
+  let movies = []
+  if (
+    (searchBy && searchValue === undefined) ||
+    (searchBy === undefined && searchValue)
+  )
+    throw boom.BadRequest()
   else if (searchBy === 'title')
     movies = await movieRepository.findAllMoviesContainsTitle(searchValue)
   else if (searchBy === 'plot')
@@ -20,7 +23,7 @@ movieService.getMovies = async (searchBy, searchValue) => {
       movieRepository.findAllMoviesContainsActor(searchValue)
     ])
     movies = [...byTitle, ...byPlot, ...byActor]
-  } else throw boom.BadRequest()
+  } else movies = await movieRepository.findAllMovies()
 
   const moviesDTO = {
     movies: movies.map(movie => ({ title: movie.title, plot: movie.plot }))
