@@ -3,8 +3,24 @@ const movieRepository = require('../repositories/movieRepository')
 
 const movieService = {}
 
-movieService.getMovies = async () => {
-  const movies = await movieRepository.findAllMovies()
+movieService.getMovies = async (searchBy, searchValue) => {
+  let movies
+  if (searchBy === undefined && searchValue === undefined)
+    movies = await movieRepository.findAllMovies()
+  else if (searchBy === 'title' && searchValue !== undefined)
+    movies = await movieRepository.findAllMoviesContainsTitle(searchValue)
+  else if (searchBy === 'plot' && searchValue !== undefined)
+    movies = await movieRepository.findAllMoviesContainsPlot(searchValue)
+  else if (searchBy === 'actor' && searchValue !== undefined)
+    movies = await movieRepository.findAllMoviesContainsActor(searchValue)
+  else if (searchBy === 'all' && searchValue !== undefined) {
+    const [byTitle, byPlot, byActor] = await Promise.all([
+      movieRepository.findAllMoviesContainsTitle(searchValue),
+      movieRepository.findAllMoviesContainsPlot(searchValue),
+      movieRepository.findAllMoviesContainsActor(searchValue)
+    ])
+    movies = [...byTitle, ...byPlot, ...byActor]
+  } else throw boom.BadRequest()
   const moviesDTO = {
     movies: movies.map(movie => ({ title: movie.title, plot: movie.plot }))
   }

@@ -3,7 +3,10 @@ const movieService = require('../services/movieService')
 const movieController = {}
 
 movieController.getMovies = async (req, res) => {
-  return res.status(200).json(await movieService.getMovies())
+  const { searchBy, searchValue } = req.query
+  return res
+    .status(200)
+    .json(await movieService.getMovies(searchBy, searchValue))
 }
 
 movieController.getMovieById = async (req, res) => {

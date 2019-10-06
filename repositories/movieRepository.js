@@ -12,6 +12,30 @@ movieRepository.findAllMovies = async () => {
   return movies
 }
 
+movieRepository.findAllMoviesContainsTitle = async searchValue => {
+  const movies = await connection.db
+    .collection('movieDetails')
+    .find({ title: { $regex: `.*${searchValue}.*`, $options: 'i' } })
+    .toArray()
+  return movies
+}
+
+movieRepository.findAllMoviesContainsPlot = async searchValue => {
+  const movies = await connection.db
+    .collection('movieDetails')
+    .find({ plot: { $regex: `.*${searchValue}.*`, $options: 'i' } })
+    .toArray()
+  return movies
+}
+
+movieRepository.findAllMoviesContainsActor = async searchValue => {
+  const movies = await connection.db
+    .collection('movieDetails')
+    .find({ actor: { $regex: `.*${searchValue}.*`, $options: 'i' } })
+    .toArray()
+  return movies
+}
+
 movieRepository.findMovieById = async id => {
   const movie = await connection.db
     .collection('movieDetails')
