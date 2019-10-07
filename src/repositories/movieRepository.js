@@ -1,15 +1,16 @@
 const mongoose = require('mongoose')
+
 const { connection } = mongoose
 const { ObjectId } = mongoose.Types
 
 const movieRepository = {}
 
-movieRepository.getMoviesCount = async () => {
-  const moviesCount = await connection.db
+movieRepository.getMoviesTotalCount = async () => {
+  const moviesTotalCount = await connection.db
     .collection('movieDetails')
     .find()
     .count()
-  return moviesCount
+  return moviesTotalCount
 }
 
 movieRepository.findAllMovies = async (offset, limit) => {

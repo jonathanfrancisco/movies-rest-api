@@ -7,30 +7,45 @@ movieService.getMovies = async (
   searchBy,
   searchValue,
   page = 1,
-  limit = 10
+  limit = 15
 ) => {
+  const intPage = parseInt(page, 10)
+  const intLimit = parseInt(limit, 10)
+  const offset = (intPage - 1) * intLimit
   let movies = []
-  const offset = (parseInt(page, 10) - 1) * parseInt(limit, 10)
   if (
     (searchBy && searchValue === undefined) ||
     (searchBy === undefined && searchValue)
   )
     throw boom.BadRequest()
   else if (searchBy === 'title')
-    movies = await movieRepository.findAllMoviesContainsTitle(searchValue)
+    movies = await movieRepository.findAllMoviesContainsTitle(
+      searchValue,
+      offset,
+      intLimit
+    )
   else if (searchBy === 'plot')
-    movies = await movieRepository.findAllMoviesContainsPlot(searchValue)
+    movies = await movieRepository.findAllMoviesContainsPlot(
+      searchValue,
+      offset,
+      intLimit
+    )
   else if (searchBy === 'actor')
-    movies = await movieRepository.findAllMoviesContainsActor(searchValue)
+    movies = await movieRepository.findAllMoviesContainsActor(
+      searchValue,
+      offset,
+      intLimit
+    )
   else if (searchBy === 'all') {
     const [byTitle, byPlot, byActor] = await Promise.all([
-      movieRepository.findAllMoviesContainsTitle(searchValue),
-      movieRepository.findAllMoviesContainsPlot(searchValue),
-      movieRepository.findAllMoviesContainsActor(searchValue)
+      movieRepository.findAllMoviesContainsTitle(searchValue, offset, intLimit),
+      movieRepository.findAllMoviesContainsPlot(searchValue, offset, intLimit),
+      movieRepository.findAllMoviesContainsActor(searchValue, offset, intLimit)
     ])
     movies = [...byTitle, ...byPlot, ...byActor]
-  } else movies = await movieRepository.findAllMovies(offset, limit)
-  const moviesCount = movieRepository.getMoviesCount()
+  } else movies = await movieRepository.findAllMovies(offset, intLimit)
+
+  const moviesTotalCount = await movieRepository.getMoviesTotalCount()
   const moviesDTO = {
     data: {
       movies: movies.map(movie => ({
@@ -40,7 +55,10 @@ movieService.getMovies = async (
         year: movie.year,
         genre: movie.genre
       })),
-      currentPage: page
+      currentPage: page,
+      size: movies.length,
+      totalPages: parseInt(moviesTotalCount / intLimit, 10),
+      totalSize: moviesTotalCount
     }
   }
   return moviesDTO
