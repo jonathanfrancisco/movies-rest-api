@@ -19,6 +19,21 @@ movieController.deleteMovieById = async (req, res) => {
   return res.status(204).json(await movieService.deleteMovieById(id))
 }
 
+movieController.editMovieById = async (req, res) => {
+  const { id } = req.params
+  const update = {
+    poster: req.body.poster,
+    title: req.body.title,
+    year: req.body.year,
+    actors: req.body.actors,
+    plot: req.body.plot,
+    rated: req.body.rated,
+    director: req.body.director,
+    writers: req.body.writers
+  }
+  return res.status(200).json(await movieService.editMovieById(id, update))
+}
+
 movieController.getCountriesByMovieId = async (req, res) => {
   const { id } = req.params
   return res.status(200).json(await movieService.getCountriesByMovieId(id))

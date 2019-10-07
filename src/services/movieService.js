@@ -50,7 +50,7 @@ movieService.getMovies = async (
     data: {
       movies: movies.map(movie => ({
         id: movie._id,
-        poster: movie.poster,
+        poster: movie.poster.replace(/^http/, 'https'),
         title: movie.title,
         year: movie.year,
         genre: movie.genre
@@ -68,16 +68,20 @@ movieService.getMovieById = async id => {
   const movie = await movieRepository.findMovieById(id)
   if (!movie) throw boom.NotFound()
   const movieDTO = {
-    id: movie._id,
-    poster: movie.poster,
-    title: movie.title,
-    year: movie.year,
-    actors: movie.actors,
-    plot: movie.plot,
-    rated: movie.rated,
-    genre: movie.genre,
-    director: movie.director,
-    writers: movie.writers
+    data: {
+      movie: {
+        id: movie._id,
+        poster: movie.poster.replace(/^http/, 'https'),
+        title: movie.title,
+        year: movie.year,
+        actors: movie.actors,
+        plot: movie.plot,
+        rated: movie.rated,
+        genre: movie.genre,
+        director: movie.director,
+        writers: movie.writers
+      }
+    }
   }
   return movieDTO
 }
@@ -87,6 +91,33 @@ movieService.deleteMovieById = async id => {
   if (!movieToDelete) throw boom.NotFound()
   await movieRepository.removeMovieById(id)
   return {}
+}
+
+movieService.editMovieById = async (id, update) => {
+  const movieToUpdate = await movieRepository.findMovieById(id)
+  if (!movieToUpdate) throw boom.NotFound()
+
+  const updatedMovie = await movieRepository.updateMovieById(id, {
+    ...movieToUpdate,
+    ...update
+  })
+  const updatedMovieDTO = {
+    data: {
+      movie: {
+        poster: updatedMovie.poster.replace(/^http/, 'https'),
+        title: updatedMovie.title,
+        year: updatedMovie.year,
+        actors: updatedMovie.actors,
+        plot: updatedMovie.plot,
+        rated: updatedMovie.rated,
+        genre: updatedMovie.genre,
+        director: updatedMovie.director,
+        writers: updatedMovie.writers
+      },
+      update: true
+    }
+  }
+  return updatedMovieDTO
 }
 
 movieService.getCountriesByMovieId = async id => {

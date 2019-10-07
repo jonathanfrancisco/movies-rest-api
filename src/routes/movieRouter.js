@@ -6,6 +6,7 @@ const catchErrors = require('../catchErrors')
 movieRouter.get('/movies', catchErrors(movieController.getMovies))
 movieRouter.get('/movies/:id', catchErrors(movieController.getMovieById))
 movieRouter.delete('/movies/:id', catchErrors(movieController.deleteMovieById))
+movieRouter.put('/movies/:id', catchErrors(movieController.editMovieById))
 movieRouter.get(
   '/movies/:id/countries',
   catchErrors(movieController.getCountriesByMovieId)

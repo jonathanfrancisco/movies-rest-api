@@ -79,4 +79,15 @@ movieRepository.removeMovieById = async id => {
   return deleted
 }
 
+movieRepository.updateMovieById = async (id, update) => {
+  const updated = await connection.db
+    .collection('movieDetails')
+    .findOneAndUpdate(
+      { _id: ObjectId(id) },
+      { $set: update },
+      { returnOriginal: false }
+    )
+  return updated.value
+}
+
 module.exports = movieRepository

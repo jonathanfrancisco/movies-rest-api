@@ -2,6 +2,7 @@ const express = require('express')
 const boom = require('http-errors')
 const logger = require('morgan')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 const databaseLoader = require('./loaders/database')
 const movieRouter = require('./routes/movieRouter')
 
@@ -11,6 +12,7 @@ databaseLoader()
 
 app.use(logger('dev'))
 app.use(bodyParser.json())
+app.use(cors())
 app.use(movieRouter)
 
 // if no route matches
