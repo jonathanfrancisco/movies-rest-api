@@ -18,29 +18,23 @@ movieService.getMovies = async (
     (searchBy === undefined && searchValue)
   )
     throw boom.BadRequest()
-  else if (searchBy === 'title')
-    movies = await movieRepository.findAllMoviesContainsTitle(
+  else if (
+    searchBy === 'title' ||
+    searchBy === 'plot' ||
+    searchBy === 'actor'
+  ) {
+    searchBy = searchBy === 'actor' ? 'actors' : searchBy
+    movies = await movieRepository.findAllMoviesByProperty(
+      searchBy,
       searchValue,
       offset,
       intLimit
     )
-  else if (searchBy === 'plot')
-    movies = await movieRepository.findAllMoviesContainsPlot(
-      searchValue,
-      offset,
-      intLimit
-    )
-  else if (searchBy === 'actor')
-    movies = await movieRepository.findAllMoviesContainsActor(
-      searchValue,
-      offset,
-      intLimit
-    )
-  else if (searchBy === 'all') {
+  } else if (searchBy === 'all') {
     const [byTitle, byPlot, byActor] = await Promise.all([
-      movieRepository.findAllMoviesContainsTitle(searchValue, offset, intLimit),
-      movieRepository.findAllMoviesContainsPlot(searchValue, offset, intLimit),
-      movieRepository.findAllMoviesContainsActor(searchValue, offset, intLimit)
+      movieRepository.findAllMoviesByProperty('title', offset, intLimit),
+      movieRepository.findAllMoviesByProperty('plot', offset, intLimit),
+      movieRepository.findAllMoviesByProperty('actors', offset, intLimit)
     ])
     movies = [...byTitle, ...byPlot, ...byActor]
   } else movies = await movieRepository.findAllMovies(offset, intLimit)
