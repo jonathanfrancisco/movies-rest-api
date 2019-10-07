@@ -55,7 +55,7 @@ movieService.getMovies = async (
         year: movie.year,
         genre: movie.genre
       })),
-      currentPage: page,
+      currentPage: intPage,
       size: movies.length
       // totalPages: parseInt(moviesTotalCount / intLimit, 10),
       // totalSize: moviesTotalCount
