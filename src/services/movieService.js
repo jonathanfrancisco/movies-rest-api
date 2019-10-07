@@ -56,9 +56,9 @@ movieService.getMovies = async (
         genre: movie.genre
       })),
       currentPage: page,
-      size: movies.length,
-      totalPages: parseInt(moviesTotalCount / intLimit, 10),
-      totalSize: moviesTotalCount
+      size: movies.length
+      // totalPages: parseInt(moviesTotalCount / intLimit, 10),
+      // totalSize: moviesTotalCount
     }
   }
   return moviesDTO
