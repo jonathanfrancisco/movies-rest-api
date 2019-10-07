@@ -44,23 +44,19 @@ movieService.getMovies = async (
     ])
     movies = [...byTitle, ...byPlot, ...byActor]
   } else movies = await movieRepository.findAllMovies(offset, intLimit)
-
-  const moviesTotalCount = await movieRepository.getMoviesTotalCount()
   const moviesDTO = {
-    data: {
-      movies: movies.map(movie => ({
-        id: movie._id,
-        poster: movie.poster.replace(/^http/, 'https'),
-        title: movie.title,
-        year: movie.year,
-        genre: movie.genre
-      })),
-      currentPage: intPage,
-      size: movies.length
-      // totalPages: parseInt(moviesTotalCount / intLimit, 10),
-      // totalSize: moviesTotalCount
-    }
+    movies: movies.map(movie => ({
+      id: movie._id,
+      poster:
+        movie.poster === null ? null : movie.poster.replace(/^http/, 'https'),
+      title: movie.title,
+      year: movie.year,
+      genre: movie.genre
+    })),
+    currentPage: intPage,
+    size: movies.length
   }
+
   return moviesDTO
 }
 
@@ -68,19 +64,18 @@ movieService.getMovieById = async id => {
   const movie = await movieRepository.findMovieById(id)
   if (!movie) throw boom.NotFound()
   const movieDTO = {
-    data: {
-      movie: {
-        id: movie._id,
-        poster: movie.poster.replace(/^http/, 'https'),
-        title: movie.title,
-        year: movie.year,
-        actors: movie.actors,
-        plot: movie.plot,
-        rated: movie.rated,
-        genre: movie.genre,
-        director: movie.director,
-        writers: movie.writers
-      }
+    movie: {
+      id: movie._id,
+      poster:
+        movie.poster === null ? null : movie.poster.replace(/^http/, 'https'),
+      title: movie.title,
+      year: movie.year,
+      actors: movie.actors,
+      plot: movie.plot,
+      rated: movie.rated,
+      genre: movie.genre,
+      director: movie.director,
+      writers: movie.writers
     }
   }
   return movieDTO
@@ -102,21 +97,23 @@ movieService.editMovieById = async (id, update) => {
     ...update
   })
   const updatedMovieDTO = {
-    data: {
-      movie: {
-        poster: updatedMovie.poster.replace(/^http/, 'https'),
-        title: updatedMovie.title,
-        year: updatedMovie.year,
-        actors: updatedMovie.actors,
-        plot: updatedMovie.plot,
-        rated: updatedMovie.rated,
-        genre: updatedMovie.genre,
-        director: updatedMovie.director,
-        writers: updatedMovie.writers
-      },
-      update: true
-    }
+    movie: {
+      poster:
+        updatedMovie.poster === null
+          ? null
+          : updatedMovie.poster.replace(/^http/, 'https'),
+      title: updatedMovie.title,
+      year: updatedMovie.year,
+      actors: updatedMovie.actors,
+      plot: updatedMovie.plot,
+      rated: updatedMovie.rated,
+      genre: updatedMovie.genre,
+      director: updatedMovie.director,
+      writers: updatedMovie.writers
+    },
+    update: true
   }
+
   return updatedMovieDTO
 }
 
