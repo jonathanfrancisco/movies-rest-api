@@ -48,12 +48,27 @@ movieService.getMovies = async (
       byPlotCount,
       byActorCount
     ] = await Promise.all([
-      movieRepository.findAllMoviesByProperty('title', offset, intLimit),
-      movieRepository.findAllMoviesByProperty('plot', offset, intLimit),
-      movieRepository.findAllMoviesByProperty('actors', offset, intLimit),
+      movieRepository.findAllMoviesByProperty(
+        'title',
+        searchValue,
+        offset,
+        intLimit
+      ),
+      movieRepository.findAllMoviesByProperty(
+        'plot',
+        searchValue,
+        offset,
+        intLimit
+      ),
+      movieRepository.findAllMoviesByProperty(
+        'actors',
+        searchValue,
+        offset,
+        intLimit
+      ),
       movieRepository.getAllMoviesTotalCountByProperty('title', searchValue),
       movieRepository.getAllMoviesTotalCountByProperty('plot', searchValue),
-      movieRepository.getAllMoviesTotalCountByProperty('actor', searchValue)
+      movieRepository.getAllMoviesTotalCountByProperty('actors', searchValue)
     ])
     movies = [...byTitle, ...byPlot, ...byActor]
     totalPages = parseInt(
