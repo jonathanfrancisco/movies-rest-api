@@ -12,7 +12,10 @@ movieService.getMovies = async (
   const intPage = parseInt(page, 10)
   const intLimit = parseInt(limit, 10)
   const offset = (intPage - 1) * intLimit
+  let totalPages = 0
+  let totalSize = 0
   let movies = []
+
   if (
     (searchBy && searchValue === undefined) ||
     (searchBy === undefined && searchValue)
@@ -24,20 +27,50 @@ movieService.getMovies = async (
     searchBy === 'actor'
   ) {
     searchBy = searchBy === 'actor' ? 'actors' : searchBy
-    movies = await movieRepository.findAllMoviesByProperty(
-      searchBy,
-      searchValue,
-      offset,
-      intLimit
-    )
+    const [moviesResult, moviesTotalCount] = await Promise.all([
+      movieRepository.findAllMoviesByProperty(
+        searchBy,
+        searchValue,
+        offset,
+        intLimit
+      ),
+      movieRepository.getAllMoviesTotalCountByProperty(searchBy, searchValue)
+    ])
+    movies = moviesResult
+    totalPages = parseInt(moviesTotalCount / intLimit, 10)
+    totalSize = moviesTotalCount
   } else if (searchBy === 'all') {
-    const [byTitle, byPlot, byActor] = await Promise.all([
+    const [
+      byTitle,
+      byPlot,
+      byActor,
+      byTitleCount,
+      byPlotCount,
+      byActorCount
+    ] = await Promise.all([
       movieRepository.findAllMoviesByProperty('title', offset, intLimit),
       movieRepository.findAllMoviesByProperty('plot', offset, intLimit),
-      movieRepository.findAllMoviesByProperty('actors', offset, intLimit)
+      movieRepository.findAllMoviesByProperty('actors', offset, intLimit),
+      movieRepository.getAllMoviesTotalCountByProperty('title', searchValue),
+      movieRepository.getAllMoviesTotalCountByProperty('plot', searchValue),
+      movieRepository.getAllMoviesTotalCountByProperty('actor', searchValue)
     ])
     movies = [...byTitle, ...byPlot, ...byActor]
-  } else movies = await movieRepository.findAllMovies(offset, intLimit)
+    totalPages = parseInt(
+      (byTitleCount + byPlotCount + byActorCount) / intLimit,
+      10
+    )
+    totalSize = byTitleCount + byPlotCount + byActorCount
+  } else {
+    const [moviesResult, moviesTotalCount] = await Promise.all([
+      movieRepository.findAllMovies(offset, intLimit),
+      movieRepository.getAllMoviesTotalCount()
+    ])
+    movies = moviesResult
+    totalPages = parseInt(moviesTotalCount / intLimit, 10)
+    totalSize = moviesTotalCount
+  }
+
   const moviesDTO = {
     movies: movies.map(movie => ({
       id: movie._id,
@@ -48,9 +81,10 @@ movieService.getMovies = async (
       genre: movie.genre
     })),
     currentPage: intPage,
-    size: movies.length
+    size: movies.length,
+    totalPages,
+    totalSize
   }
-
   return moviesDTO
 }
 

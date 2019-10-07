@@ -5,12 +5,12 @@ const { ObjectId } = mongoose.Types
 
 const movieRepository = {}
 
-movieRepository.getMoviesTotalCount = async () => {
-  const moviesTotalCount = await connection.db
+movieRepository.getAllMoviesTotalCount = async () => {
+  const allMoviesTotalCount = await connection.db
     .collection('movieDetails')
     .find()
     .count()
-  return moviesTotalCount
+  return allMoviesTotalCount
 }
 
 movieRepository.findAllMovies = async (offset, limit) => {
@@ -21,6 +21,19 @@ movieRepository.findAllMovies = async (offset, limit) => {
     .limit(limit)
     .toArray()
   return movies
+}
+
+movieRepository.getAllMoviesTotalCountByProperty = async (
+  searchBy,
+  searchValue
+) => {
+  const filter = {}
+  filter[searchBy] = { $regex: `.*${searchValue}.*`, $options: 'i' }
+  const allMoviesTotalCountByProperty = await connection.db
+    .collection('movieDetails')
+    .find(filter)
+    .count()
+  return allMoviesTotalCountByProperty
 }
 
 movieRepository.findAllMoviesByProperty = async (
