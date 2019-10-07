@@ -23,26 +23,44 @@ movieRepository.findAllMovies = async (offset, limit) => {
   return movies
 }
 
-movieRepository.findAllMoviesContainsTitle = async searchValue => {
+movieRepository.findAllMoviesContainsTitle = async (
+  searchValue,
+  offset,
+  limit
+) => {
   const movies = await connection.db
     .collection('movieDetails')
     .find({ title: { $regex: `.*${searchValue}.*`, $options: 'i' } })
+    .skip(offset)
+    .limit(limit)
     .toArray()
   return movies
 }
 
-movieRepository.findAllMoviesContainsPlot = async searchValue => {
+movieRepository.findAllMoviesContainsPlot = async (
+  searchValue,
+  offset,
+  limit
+) => {
   const movies = await connection.db
     .collection('movieDetails')
     .find({ plot: { $regex: `.*${searchValue}.*`, $options: 'i' } })
+    .skip(offset)
+    .limit(limit)
     .toArray()
   return movies
 }
 
-movieRepository.findAllMoviesContainsActor = async searchValue => {
+movieRepository.findAllMoviesContainsActor = async (
+  searchValue,
+  offset,
+  limit
+) => {
   const movies = await connection.db
     .collection('movieDetails')
     .find({ actors: { $regex: `.*${searchValue}.*`, $options: 'i' } })
+    .skip(offset)
+    .limit(limit)
     .toArray()
   return movies
 }
