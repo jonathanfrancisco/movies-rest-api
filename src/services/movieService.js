@@ -33,7 +33,7 @@ movieService.getMovies = async (
       movieRepository.getAllMoviesTotalCountByProperty(searchBy, searchValue)
     ])
     movies = moviesResult
-    totalPages = parseInt(moviesTotalCount / intLimit, 10)
+    totalPages = Math.floor(moviesTotalCount / intLimit, 10)
     totalSize = moviesTotalCount
   } else if (searchBy === 'all') {
     const [
@@ -86,7 +86,7 @@ movieService.getMovies = async (
       movieRepository.getAllMoviesTotalCount()
     ])
     movies = moviesResult
-    totalPages = parseInt(moviesTotalCount / intLimit, 10)
+    totalPages = Math.floor(moviesTotalCount / intLimit)
     totalSize = moviesTotalCount
   }
 
