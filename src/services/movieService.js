@@ -95,6 +95,7 @@ movieService.getMovies = async (
         movie.poster === null ? null : movie.poster.replace(/^http/, 'https'),
       title: movie.title,
       year: movie.year,
+      plot: movie.plot,
       genres: movie.genres
     })),
     currentPage: intPage,
