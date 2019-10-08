@@ -76,7 +76,9 @@ movieService.getMovies = async (
       movieRepository.getAllMoviesTotalCountByProperty('genres', searchValue)
     ])
     movies = [...byTitle, ...byPlot, ...byActor, ...byGenre]
-    totalSize = Math.floor(byTitleCount + byPlotCount + byActorCount + byGenre)
+    totalSize = Math.floor(
+      byTitleCount + byPlotCount + byActorCount + byGenreCount
+    )
     totalPages = Math.floor(totalSize / intLimit)
   } else {
     const [moviesResult, moviesTotalCount] = await Promise.all([
