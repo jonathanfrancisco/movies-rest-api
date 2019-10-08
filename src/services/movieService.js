@@ -33,60 +33,40 @@ movieService.getMovies = async (
       movieRepository.getAllMoviesTotalCountByProperty(searchBy, searchValue)
     ])
     movies = moviesResult
-    totalPages = Math.floor(moviesTotalCount / intLimit, 10)
+    totalPages = Math.ceil(moviesTotalCount / intLimit, 10)
     totalSize = moviesTotalCount
-  } else if (searchBy === 'all') {
-    const [
-      byTitle,
-      byPlot,
-      byActor,
-      byGenre,
-      byTitleCount,
-      byPlotCount,
-      byActorCount,
-      byGenreCount
-    ] = await Promise.all([
-      movieRepository.findAllMoviesByProperty(
-        'title',
-        searchValue,
-        offset,
-        intLimit
-      ),
-      movieRepository.findAllMoviesByProperty(
-        'plot',
-        searchValue,
-        offset,
-        intLimit
-      ),
-      movieRepository.findAllMoviesByProperty(
-        'actors',
-        searchValue,
-        offset,
-        intLimit
-      ),
-      movieRepository.findAllMoviesByProperty(
-        'genres',
-        searchValue,
-        offset,
-        intLimit
-      ),
-      movieRepository.getAllMoviesTotalCountByProperty('title', searchValue),
-      movieRepository.getAllMoviesTotalCountByProperty('plot', searchValue),
-      movieRepository.getAllMoviesTotalCountByProperty('actors', searchValue),
-      movieRepository.getAllMoviesTotalCountByProperty('genres', searchValue)
-    ])
-    movies = [...byTitle, ...byPlot, ...byActor, ...byGenre]
-    totalSize = Math.floor(
-      byTitleCount + byPlotCount + byActorCount + byGenreCount
-    )
-    totalPages = Math.floor(totalSize / intLimit)
-  } else {
+  }
+  // } else if (searchBy === 'all') {
+  //   const moviesByFilterArrayPromise = []
+  //   FILTER_BY_ENUM.forEach(filterBy => {
+  //     moviesByFilterArrayPromise.push(
+  //       movieRepository.findAllMoviesByProperty(
+  //         filterBy,
+  //         searchValue,
+  //         offset,
+  //         intLimit
+  //       )
+  //     )
+  //   })
+  //   const moviesByFilterArray = await Promise.all(moviesByFilterArrayPromise)
+  //   const allMovies = moviesByFilterArray.reduce(
+  //     (arr, moviesByFilter) => [...arr, ...moviesByFilter],
+  //     []
+  //   )
+
+  //   console.log(allMovies.length)
+
+  //   // movies = allMovies
+  //   // totalPages = Math.floor(allMoviesCount / intLimit)
+  //   // totalSize = allMoviesCount
+  // }
+  else {
     const [moviesResult, moviesTotalCount] = await Promise.all([
       movieRepository.findAllMovies(offset, intLimit),
       movieRepository.getAllMoviesTotalCount()
     ])
     movies = moviesResult
-    totalPages = Math.floor(moviesTotalCount / intLimit)
+    totalPages = Math.ceil(moviesTotalCount / intLimit)
     totalSize = moviesTotalCount
   }
 
