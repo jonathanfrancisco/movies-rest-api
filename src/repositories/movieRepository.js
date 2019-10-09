@@ -6,11 +6,11 @@ const { ObjectId } = mongoose.Types
 const movieRepository = {}
 
 movieRepository.getAllMoviesTotalCount = async () => {
-  const allMoviesTotalCount = await connection.db
+  const count = await connection.db
     .collection('movieDetails')
     .find()
     .count()
-  return allMoviesTotalCount
+  return count
 }
 
 movieRepository.findAllMovies = async (offset, limit) => {
@@ -29,11 +29,11 @@ movieRepository.getAllMoviesTotalCountByProperty = async (
 ) => {
   const filter = {}
   filter[searchBy] = { $regex: `.*${searchValue}.*`, $options: 'i' }
-  const allMoviesTotalCountByProperty = await connection.db
+  const count = await connection.db
     .collection('movieDetails')
     .find(filter)
     .count()
-  return allMoviesTotalCountByProperty
+  return count
 }
 
 movieRepository.findAllMoviesByProperty = async (
@@ -47,6 +47,46 @@ movieRepository.findAllMoviesByProperty = async (
   const movies = await connection.db
     .collection('movieDetails')
     .find(filter)
+    .skip(offset)
+    .limit(limit)
+    .toArray()
+  return movies
+}
+
+movieRepository.getAllMoviesCountBySetOfProperties = async (
+  arrOfFilterBy,
+  searchValue
+) => {
+  const filterOr = arrOfFilterBy.map(filterBy => {
+    const filterKeyValue = {}
+    filterKeyValue[filterBy] = { $regex: `.*${searchValue}.*`, $options: 'i' }
+    return filterKeyValue
+  })
+  const count = await connection.db
+    .collection('movieDetails')
+    .find({
+      $or: filterOr
+    })
+    .count()
+  return count
+}
+
+movieRepository.findAllMoviesBySetOfProperties = async (
+  arrOfFilterBy,
+  searchValue,
+  offset,
+  limit
+) => {
+  const filterOr = arrOfFilterBy.map(filterBy => {
+    const filterKeyValue = {}
+    filterKeyValue[filterBy] = { $regex: `.*${searchValue}.*`, $options: 'i' }
+    return filterKeyValue
+  })
+  const movies = await connection.db
+    .collection('movieDetails')
+    .find({
+      $or: filterOr
+    })
     .skip(offset)
     .limit(limit)
     .toArray()
