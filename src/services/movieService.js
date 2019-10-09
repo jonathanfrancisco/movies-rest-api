@@ -33,7 +33,7 @@ movieService.getMovies = async (
       movieRepository.getAllMoviesTotalCountByProperty(searchBy, searchValue)
     ])
     movies = moviesResult
-    totalPages = Math.ceil(moviesTotalCount / intLimit, 10)
+    totalPages = Math.ceil(moviesTotalCount / intLimit)
     totalSize = moviesTotalCount
   } else if (searchBy === 'all') {
     const [moviesResult, moviesTotalCount] = await Promise.all([
@@ -64,8 +64,7 @@ movieService.getMovies = async (
   const moviesDTO = {
     movies: movies.map(movie => ({
       id: movie._id,
-      poster:
-        movie.poster === null ? null : movie.poster.replace(/^http/, 'https'),
+      poster: movie.poster ? movie.poster.replace(/^http/, 'https') : null,
       title: movie.title,
       year: movie.year,
       plot: movie.plot,
