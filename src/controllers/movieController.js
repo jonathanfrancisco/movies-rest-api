@@ -1,3 +1,4 @@
+const Joi = require('@hapi/joi')
 const movieService = require('../services/movieService')
 
 const movieController = {}

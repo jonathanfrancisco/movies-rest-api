@@ -9,7 +9,6 @@ const movieRouter = require('./routes/movieRouter')
 const app = express()
 
 databaseLoader()
-
 app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(cors())
