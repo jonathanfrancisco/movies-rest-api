@@ -64,7 +64,7 @@ movieService.getMovies = async (
   const moviesDTO = {
     movies: movies.map(movie => ({
       id: movie._id,
-      poster: movie.poster ? movie.poster.replace(/^http/, 'https') : null,
+      poster: movie.poster ? movie.poster : null,
       title: movie.title,
       year: movie.year,
       plot: movie.plot,
@@ -85,7 +85,7 @@ movieService.getMovieById = async id => {
     movie: {
       id: movie._id,
       poster:
-        movie.poster === null ? null : movie.poster.replace(/^http/, 'https'),
+        movie.poster ? movie.poster : null,
       title: movie.title,
       year: movie.year,
       actors: movie.actors,
