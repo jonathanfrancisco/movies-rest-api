@@ -29,4 +29,6 @@ app.use((err, req, res, next) => {
   })
 })
 
-module.exports = app
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`server started listening on ${process.env.PORT || 3000}`)
+})
