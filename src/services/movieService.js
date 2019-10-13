@@ -84,8 +84,7 @@ movieService.getMovieById = async id => {
   const movieDTO = {
     movie: {
       id: movie._id,
-      poster:
-        movie.poster ? movie.poster : null,
+      poster: movie.poster ? movie.poster : null,
       title: movie.title,
       year: movie.year,
       actors: movie.actors,
@@ -116,10 +115,7 @@ movieService.editMovieById = async (id, update) => {
   })
   const updatedMovieDTO = {
     movie: {
-      poster:
-        updatedMovie.poster === null
-          ? null
-          : updatedMovie.poster.replace(/^http/, 'https'),
+      poster: movie.poster ? movie.poster : null
       title: updatedMovie.title,
       year: updatedMovie.year,
       actors: updatedMovie.actors,
