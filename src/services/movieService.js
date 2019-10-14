@@ -115,12 +115,12 @@ movieService.editMovieById = async (id, update) => {
   })
   const updatedMovieDTO = {
     movie: {
-      poster: movie.poster ? movie.poster : null
+      poster: movie.poster ? movie.poster : null,
       title: updatedMovie.title,
       year: updatedMovie.year,
       actors: updatedMovie.actors,
       plot: updatedMovie.plot,
-      rated: updatedMovie.rated,
+      rated: updatedMovie.imdb,
       genres: updatedMovie.genres,
       director: updatedMovie.director,
       writers: updatedMovie.writers
