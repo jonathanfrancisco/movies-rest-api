@@ -18,6 +18,8 @@ const jwtCheck = jwt({
 })
 
 movieRouter.get('/movies', catchErrors(movieController.getMovies))
+movieRouter.get('/movies/popular', catchErrors(movieController.getTopTenMovies))
+movieRouter.get('/movies/random', catchErrors(movieController.getRandomMovies))
 movieRouter.get('/movies/:id', catchErrors(movieController.getMovieById))
 movieRouter.delete(
   '/movies/:id',

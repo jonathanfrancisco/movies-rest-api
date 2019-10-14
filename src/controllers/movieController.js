@@ -10,6 +10,14 @@ movieController.getMovies = async (req, res) => {
     .json(await movieService.getMovies(searchBy, searchValue, page, limit))
 }
 
+movieController.getTopTenMovies = async (req, res) => {
+  return res.status(200).json(await movieService.getTopTenMovies())
+}
+
+movieController.getRandomMovies = async (req, res) => {
+  return res.status(200).json(await movieService.getRandomMovies())
+}
+
 movieController.getMovieById = async (req, res) => {
   const { id } = req.params
   return res.status(200).json(await movieService.getMovieById(id))

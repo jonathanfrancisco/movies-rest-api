@@ -101,6 +101,40 @@ movieService.getMovieById = async id => {
   return movieDTO
 }
 
+movieService.getTopTenMovies = async () => {
+  const movies = await movieRepository.findTopTenMovies()
+  const moviesDTO = {
+    movies: movies.map(movie => ({
+      id: movie._id,
+      poster: movie.poster ? movie.poster : null,
+      title: movie.title,
+      year: movie.year,
+      plot: movie.plot,
+      genres: movie.genres,
+      rated: movie.rated,
+      imdb: movie.imdb
+    }))
+  }
+  return moviesDTO
+}
+
+movieService.getRandomMovies = async () => {
+  const movies = await movieRepository.findRandomMovies()
+  const moviesDTO = {
+    movies: movies.map(movie => ({
+      id: movie._id,
+      poster: movie.poster ? movie.poster : null,
+      title: movie.title,
+      year: movie.year,
+      plot: movie.plot,
+      genres: movie.genres,
+      rated: movie.rated,
+      imdb: movie.imdb
+    }))
+  }
+  return moviesDTO
+}
+
 movieService.deleteMovieById = async id => {
   const movieToDelete = await movieRepository.findMovieById(id)
   if (!movieToDelete) throw boom.NotFound()

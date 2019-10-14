@@ -93,6 +93,24 @@ movieRepository.findAllMoviesBySetOfProperties = async (
   return movies
 }
 
+movieRepository.findTopTenMovies = async () => {
+  const movies = await connection.db
+    .collection('movieDetails')
+    .find()
+    .sort({ 'imdb.votes': -1, 'imdb.rating': -1 })
+    .limit(10)
+    .toArray()
+  return movies
+}
+
+movieRepository.findRandomMovies = async () => {
+  const movies = await connection.db
+    .collection('movieDetails')
+    .aggregate([{ $sample: { size: 10 } }])
+    .toArray()
+  return movies
+}
+
 movieRepository.findMovieById = async id => {
   const movie = await connection.db
     .collection('movieDetails')
