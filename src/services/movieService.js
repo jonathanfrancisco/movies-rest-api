@@ -68,7 +68,8 @@ movieService.getMovies = async (
       title: movie.title,
       year: movie.year,
       plot: movie.plot,
-      genres: movie.genres
+      genres: movie.genres,
+      imdb: movie.imdb
     })),
     currentPage: intPage,
     size: movies.length,
@@ -92,7 +93,8 @@ movieService.getMovieById = async id => {
       rated: movie.rated,
       genres: movie.genres,
       director: movie.director,
-      writers: movie.writers
+      writers: movie.writers,
+      imdb: movie.imdb
     }
   }
   return movieDTO
