@@ -69,6 +69,7 @@ movieService.getMovies = async (
       year: movie.year,
       plot: movie.plot,
       genres: movie.genres,
+      rated: movie.rated,
       imdb: movie.imdb
     })),
     currentPage: intPage,
@@ -90,10 +91,10 @@ movieService.getMovieById = async id => {
       year: movie.year,
       actors: movie.actors,
       plot: movie.plot,
-      rated: movie.rated,
       genres: movie.genres,
       director: movie.director,
       writers: movie.writers,
+      rated: movie.rated,
       imdb: movie.imdb
     }
   }
@@ -122,10 +123,10 @@ movieService.editMovieById = async (id, update) => {
       year: updatedMovie.year,
       actors: updatedMovie.actors,
       plot: updatedMovie.plot,
-      rated: updatedMovie.imdb,
       genres: updatedMovie.genres,
       director: updatedMovie.director,
-      writers: updatedMovie.writers
+      writers: updatedMovie.writers,
+      rated: updatedMovie.rated
     },
     update: true
   }
