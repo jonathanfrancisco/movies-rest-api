@@ -26,10 +26,10 @@ movieRouter.delete(
   jwtCheck,
   catchErrors(movieController.deleteMovieById)
 )
-movieRouter.put(
+movieRouter.patch(
   '/movies/:id',
   jwtCheck,
-  catchErrors(movieController.editMovieById)
+  catchErrors(movieController.patchMovieById)
 )
 movieRouter.get(
   '/movies/:id/countries',

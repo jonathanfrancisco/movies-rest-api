@@ -142,30 +142,28 @@ movieService.deleteMovieById = async id => {
   return {}
 }
 
-movieService.editMovieById = async (id, update) => {
-  const movieToUpdate = await movieRepository.findMovieById(id)
-  if (!movieToUpdate) throw boom.NotFound()
+movieService.patchMovieById = async (id, patch) => {
+  const movieToPatch = await movieRepository.findMovieById(id)
+  if (!movieToPatch) throw boom.NotFound()
 
-  const updatedMovie = await movieRepository.updateMovieById(id, {
-    ...movieToUpdate,
-    ...update
-  })
-  const updatedMovieDTO = {
+  const patchedMovie = await movieRepository.patchMovieById(id, patch)
+  const patchedMovieDTO = {
     movie: {
-      poster: movie.poster ? movie.poster : null,
-      title: updatedMovie.title,
-      year: updatedMovie.year,
-      actors: updatedMovie.actors,
-      plot: updatedMovie.plot,
-      genres: updatedMovie.genres,
-      director: updatedMovie.director,
-      writers: updatedMovie.writers,
-      rated: updatedMovie.rated
+      poster: patchedMovie.poster ? patchedMovie.poster : null,
+      title: patchedMovie.title,
+      year: patchedMovie.year,
+      actors: patchedMovie.actors,
+      plot: patchedMovie.plot,
+      genres: patchedMovie.genres,
+      director: patchedMovie.director,
+      writers: patchedMovie.writers,
+      rated: patchedMovie.rated,
+      imdb: patchedMovie.imdb
     },
     update: true
   }
 
-  return updatedMovieDTO
+  return patchedMovieDTO
 }
 
 movieService.getCountriesByMovieId = async id => {

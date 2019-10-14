@@ -28,19 +28,20 @@ movieController.deleteMovieById = async (req, res) => {
   return res.status(204).json(await movieService.deleteMovieById(id))
 }
 
-movieController.editMovieById = async (req, res) => {
+movieController.patchMovieById = async (req, res) => {
   const { id } = req.params
-  const update = {
-    poster: req.body.poster,
-    title: req.body.title,
-    year: req.body.year,
-    actors: req.body.actors,
-    plot: req.body.plot,
-    rated: req.body.rated,
-    director: req.body.director,
-    writers: req.body.writers
-  }
-  return res.status(200).json(await movieService.editMovieById(id, update))
+  // const update = {
+  //   poster: req.body.poster,
+  //   title: req.body.title,
+  //   year: req.body.year,
+  //   actors: req.body.actors,
+  //   plot: req.body.plot,
+  //   rated: req.body.rated,
+  //   director: req.body.director,
+  //   writers: req.body.writers
+  // }
+  const patch = req.body
+  return res.status(200).json(await movieService.patchMovieById(id, patch))
 }
 
 movieController.getCountriesByMovieId = async (req, res) => {
