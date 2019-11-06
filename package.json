@@ -15,7 +15,7 @@
     "express-jwt-authz": "^2.3.1",
     "http-errors": "^1.7.3",
     "jwks-rsa": "^1.6.0",
-    "mongoose": "^5.7.3",
+    "mongoose": "^5.7.5",
     "morgan": "~1.9.1"
   }
 }
